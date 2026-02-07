@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Estancia - Asados & Mariscos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #5c3c2e; }
+        .bg-estancia { background-color: var(--primary-color); }
+        .text-estancia { color: var(--primary-color); }
+        .card-menu { border-left: 4px solid var(--primary-color); }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <div class="bg-estancia text-white p-6 text-center shadow-lg">
+        <h1 class="text-3xl font-bold tracking-widest">LA ESTANCIA</h1>
+        <p class="text-xs uppercase mt-1 italic">Asados & Mariscos</p>
+        <p class="text-[10px] mt-2">Calle 22 Diagonal a la Catedral - Caucasia</p>
+    </div>
+
+    <div class="p-4">
+        <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <h2 class="font-bold mb-3 border-b pb-1">Tus Datos</h2>
+            <input type="text" id="nombre" placeholder="Nombre completo" class="w-full mb-2 p-2 border rounded">
+            <input type="text" id="direccion" placeholder="Dirección de entrega" class="w-full mb-2 p-2 border rounded">
+            <textarea id="obs_generales" placeholder="Observaciones generales del pedido..." class="w-full p-2 border rounded text-sm"></textarea>
+        </div>
+
+        <input type="text" id="search" onkeyup="filterMenu()" placeholder="Buscar plato..." class="w-full mb-4 p-3 rounded-full border shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-800">
+
+        <div id="menu-container" class="space-y-4 pb-32">
+            </div>
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-white border-t p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+        <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-lg">Total:</span>
+            <span id="total-price" class="text-xl font-bold text-estancia">$0</span>
+        </div>
+        <button onclick="sendWhatsApp()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold flex justify-center items-center gap-2">
+            <i class="fab fa-whatsapp text-xl"></i> ENVIAR PEDIDO
+        </button>
+    </div>
+
+    <script>
+        const menuData = [
+            { cat: "Entradas", items: [
+                { n: "Patacón tres salsas", p: 16000 },
+                { n: "Maduritos con queso", p: 16000 },
+                { n: "Entrada de chorizo", p: 16000 },
+                { n: "Entrada de chicharrón", p: 20000 }
+            ]},
+            { cat: "Platos Fuertes - Res", items: [
+                { n: "Estofado de lomo", p: 36000 },
+                { n: "Steak pimienta", p: 38000 },
+                { n: "Solomito en tocineta", p: 40000 },
+                { n: "Filet Mignon", p: 40000 }
+            ]},
+            { cat: "Asados al Grill", items: [
+                { n: "Mix parrillero (480gr)", p: 38000 },
+                { n: "Churrasco (350gr)", p: 40000 },
+                { n: "Punta de anca res", p: 40000 },
+                { n: "Tomahawk (620gr)", p: 68000 }
+            ]},
+            { cat: "Mariscos & Pescados", items: [
+                { n: "Cazuela de mariscos", p: 49000 },
+                { n: "Salmón a la plancha", p: 48000 },
+                { n: "Camarones al ajillo", p: 46000 },
+                { n: "Salmón marinera", p: 65000 }
+            ]},
+            { cat: "Ejecutivos & Express", items: [
+                { n: "Ejecutivo del día", p: 23000 },
+                { n: "Sancocho (Domingos)", p: 23000 },
+                { n: "Hamburguesa", p: 20000 },
+                { n: "Salchipapa", p: 18000 }
+            ]}
+        ];
+
+        let cart = {};
+
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = menuData.map(section => `
+                <div class="menu-section">
+                    <h3 class="font-bold text-estancia uppercase text-sm mb-2 px-2">${section.cat}</h3>
+                    ${section.items.map(item => `
+                        <div class="item-card bg-white p-3 rounded-lg shadow-sm mb-2 flex justify-between items-center card-menu">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">${item.n}</h4>
+                                <p class="text-sm text-gray-500">$${item.p.toLocaleString()}</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button onclick="updateQty('${item.n}', ${item.p}, -1)" class="w-8 h-8 rounded-full bg-gray-200 text-xl">-</button>
+                                <span id="qty-${item.n.replace(/\s+/g, '')}" class="font-bold">0</span>
+                                <button onclick="updateQty('${item.n}', ${item.p}, 1)" class="w-8 h-8 rounded-full bg-estancia text-white text-xl">+</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function updateQty(name, price, change) {
+            const id = name.replace(/\s+/g, '');
+            if (!cart[name]) cart[name] = { qty: 0, price: price };
+            
+            cart[name].qty += change;
+            if (cart[name].qty < 0) cart[name].qty = 0;
+            
+            document.getElementById(`qty-${id}`).innerText = cart[name].qty;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            for (let item in cart) {
+                total += cart[item].qty * cart[item].price;
+            }
+            document.getElementById('total-price').innerText = `$${total.toLocaleString()}`;
+        }
+
+        function filterMenu() {
+            let input = document.getElementById('search').value.toLowerCase();
+            let cards = document.getElementsByClassName('item-card');
+            for (let i = 0; i < cards.length; i++) {
+                let name = cards[i].getElementsByTagName('h4')[0].innerText.toLowerCase();
+                cards[i].style.display = name.includes(input) ? "flex" : "none";
+            }
+        }
+
+        function sendWhatsApp() {
+            const nombre = document.getElementById('nombre').value;
+            const direccion = document.getElementById('direccion').value;
+            const obs = document.getElementById('obs_generales').value;
+            
+            if (!nombre || !direccion) {
+                alert("Por favor completa nombre y dirección");
+                return;
+            }
+
+            let pedidoText = `*PEDIDO LA ESTANCIA*%0A%0A`;
+            pedidoText += `*Cliente:* ${nombre}%0A`;
+            pedidoText += `*Dirección:* ${direccion}%0A%0A`;
+            pedidoText += `*Detalle:*%0A`;
+
+            let total = 0;
+            let hasItems = false;
+
+            for (let item in cart) {
+                if (cart[item].qty > 0) {
+                    pedidoText += `- ${cart[item].qty}x ${item} ($${(cart[item].qty * cart[item].price).toLocaleString()})%0A`;
+                    total += cart[item].qty * cart[item].price;
+                    hasItems = true;
+                }
+            }
+
+            if (!hasItems) {
+                alert("Agrega al menos un producto al carrito");
+                return;
+            }
+
+            if(obs) pedidoText += `%0A*Obs:* ${obs}%0A`;
+            pedidoText += `%0A*TOTAL A PAGAR: $${total.toLocaleString()}*`;
+
+            const win = window.open(`https://wa.me/573205775709?text=${pedidoText}`, '_blank');
+        }
+
+        renderMenu();
+    </script>
+</body>
+</html>
