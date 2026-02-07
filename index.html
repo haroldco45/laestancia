@@ -3,117 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Estancia - Asados & Mariscos</title>
+    <title>La Estancia - App Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #5c3c2e; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f9fafb; }
+        body { font-family: sans-serif; background-color: #f3f4f6; }
         .bg-estancia { background-color: var(--primary); }
         .text-estancia { color: var(--primary); }
-        .card-menu { border-left: 5px solid var(--primary); }
-        .category-header { position: sticky; top: 0; z-index: 20; background: #f9fafb; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
+        .category-sticky { position: sticky; top: 0; z-index: 30; background: #f3f4f6; padding: 10px 0; }
     </style>
 </head>
-<body class="pb-44">
+<body class="pb-48">
 
-    <div class="bg-estancia text-white p-6 text-center shadow-xl">
-        <h1 class="text-3xl font-black tracking-tighter uppercase italic">LA ESTANCIA</h1>
-        <p class="text-[10px] uppercase tracking-[0.2em] opacity-80 mt-1">Asados & Mariscos</p>
-        <div class="mt-3 text-[11px] font-light">
-            [span_6](start_span)<p><i class="fas fa-map-marker-alt"></i> Calle 22 Diagonal a la Catedral[span_6](end_span)</p>
-            [span_7](start_span)<p>Caucasia - Antioquia[span_7](end_span)</p>
-        </div>
+    <div class="bg-estancia text-white p-6 text-center shadow-lg">
+        <h1 class="text-3xl font-bold tracking-tighter uppercase italic">LA ESTANCIA</h1>
+        <p class="text-[10px] tracking-[0.2em] opacity-90 mt-1">ASADOS & MARISCOS</p>
+        <p class="text-[11px] mt-2 italic italic opacity-80">
+            <i class="fas fa-map-marker-alt"></i> Calle 22 Diagonal a la Catedral - Caucasia
+        </p>
     </div>
 
     <div class="p-4 max-w-md mx-auto">
-        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6 border border-gray-100">
-            <h2 class="font-bold text-estancia mb-4 flex items-center gap-2 text-sm uppercase">
+        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6">
+            <h2 class="font-bold text-estancia mb-4 flex items-center gap-2 text-xs uppercase tracking-wider">
                 <i class="fas fa-motorcycle"></i> Datos del Domicilio
             </h2>
             <div class="space-y-3">
-                <input type="text" id="nombre" placeholder="Nombre completo" class="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:ring-1 focus:ring-amber-800">
-                <input type="tel" id="celular" placeholder="Número de Celular" class="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:ring-1 focus:ring-amber-800">
-                <input type="text" id="direccion" placeholder="Dirección de entrega" class="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:ring-1 focus:ring-amber-800">
-                <textarea id="obs_generales" placeholder="¿Alguna nota para la cocina?" class="w-full p-3 bg-gray-50 border rounded-xl text-sm outline-none" rows="2"></textarea>
+                <input type="text" id="nombre" placeholder="Nombre completo" class="w-full p-3 bg-gray-50 rounded-xl outline-none border focus:border-amber-800">
+                <input type="tel" id="celular" placeholder="Número de Celular" class="w-full p-3 bg-gray-50 rounded-xl outline-none border focus:border-amber-800">
+                <input type="text" id="direccion" placeholder="Dirección de entrega" class="w-full p-3 bg-gray-50 rounded-xl outline-none border focus:border-amber-800">
+                <textarea id="obs" placeholder="¿Alguna nota para la cocina?" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none border" rows="2"></textarea>
             </div>
         </div>
 
-        <div class="relative mb-8">
-            <input type="text" id="search" onkeyup="filterMenu()" placeholder="¿Qué se te antoja hoy?" 
-                   class="w-full p-4 pl-12 rounded-2xl border shadow-md outline-none focus:ring-2 focus:ring-amber-900">
+        <div class="relative mb-6">
+            <input type="text" id="search" onkeyup="filterItems()" placeholder="¿Qué se te antoja hoy?" 
+                   class="w-full p-4 pl-12 rounded-2xl shadow-md outline-none border-none">
             <i class="fas fa-search absolute left-4 top-5 text-gray-400"></i>
         </div>
 
-        <div id="menu-container" class="space-y-10"></div>
+        <div id="menu-list" class="space-y-8">
+            </div>
     </div>
 
-    <div class="fixed bottom-0 w-full bg-white border-t p-5 shadow-[0_-10px_25px_rgba(0,0,0,0.1)] z-50">
+    <div class="fixed bottom-0 w-full bg-white border-t p-5 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-50">
         <div class="max-w-md mx-auto">
             <div class="flex justify-between items-center mb-4 px-2">
-                <span class="text-gray-500 font-medium italic">Total a pagar:</span>
-                <span id="total-price" class="text-3xl font-black text-estancia">$0</span>
+                <span class="text-gray-500 font-medium">Total a pagar:</span>
+                <span id="total-val" class="text-3xl font-black text-estancia">$0</span>
             </div>
-            <button onclick="sendWhatsApp()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold flex justify-center items-center gap-3 shadow-lg active:scale-95 transition-all">
+            <button onclick="enviarPedido()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold flex justify-center items-center gap-3 shadow-lg active:scale-95 transition-all">
                 <i class="fab fa-whatsapp text-2xl"></i> PEDIR POR WHATSAPP
             </button>
         </div>
     </div>
 
     <script>
-        const menuData = [
-            { cat: "Entradas", items: [
-                [span_8](start_span){ n: "Patacón tres salsas", p: 16000, d: "Suero, guacamole y hogao[span_8](end_span)" },
-                [span_9](start_span){ n: "Maduritos con queso", p: 16000, d: "[span_9](end_span)" },
-                [span_10](start_span){ n: "Entrada de chorizo", p: 16000, d: "Con croquetas de yuca o patacón[span_10](end_span)" },
-                [span_11](start_span){ n: "Entrada de chicharrón", p: 20000, d: "[span_11](end_span)" }
+        const data = [
+            { c: "Entradas", i: [
+                { n: "Patacón tres salsas", p: 16000, d: "Suero, guacamole y hogao" },
+                { n: "Maduritos con queso", p: 16000 },
+                { n: "Entrada de chorizo", p: 16000, d: "Con yuca o patacón" },
+                { n: "Entrada de chicharrón", p: 20000 }
             ]},
-            { cat: "Mariscos de la Casa", items: [
-                [span_12](start_span){ n: "Cazuela de mariscos", p: 49000, d: "Selección completa de mariscos[span_12](end_span)" },
-                [span_13](start_span){ n: "Camarones al ajillo", p: 46000, d: "Salteados en salsa de ajo[span_13](end_span)" },
-                [span_14](start_span){ n: "Parrilla mar y tierra", p: 48000, d: "Res, cerdo, pollo y mariscos[span_14](end_span)" },
-                [span_15](start_span){ n: "Langostinos al ajillo", p: 61000, d: "[span_15](end_span)" }
+            { c: "Pollo y Cerdo", i: [
+                { n: "Rollo de pollo", p: 35000, d: "Jamón, tocineta y queso holandés" },
+                { n: "Pechuga tropical", p: 35000, d: "Salsa de piña y bacon" },
+                { n: "Pechuga Stroganoff", p: 37000 },
+                { n: "Cerdo a la naranja", p: 35000 },
+                { n: "Cerdo Stroganoff", p: 37000 }
             ]},
-            { cat: "Asados al Grill", items: [
-                [span_16](start_span){ n: "Mix parrillero (480gr)", p: 38000, d: "Res, pollo, cerdo y chorizo[span_16](end_span)" },
-                [span_17](start_span){ n: "Churrasco (350gr)", p: 40000, d: "[span_17](end_span)" },
-                [span_18](start_span){ n: "Punta de anca res (400gr)", p: 40000, d: "[span_18](end_span)" },
-                [span_19](start_span){ n: "Costillas BBQ (500gr)", p: 38000, d: "Miel-BBQ[span_19](end_span)" }
+            { c: "Res (Premium)", i: [
+                { n: "Estofado de lomo", p: 36000, d: "Vino tinto y champiñones" },
+                { n: "Steak pimienta", p: 38000 },
+                { n: "Solomito en tocineta", p: 40000 },
+                { n: "Filet Mignon", p: 40000 }
             ]},
-            { cat: "Menú Ejecutivo", items: [
-                [span_20](start_span){ n: "Ejecutivo del día", p: 23000, d: "Sopa + Bandeja con proteína a elegir[span_20](end_span)" },
-                [span_21](start_span){ n: "Sancocho (Domingos)", p: 23000, d: "Completo con arroz y aguacate[span_21](end_span)" }
+            { c: "Asados al Grill", i: [
+                { n: "Mix parrillero (480g)", p: 38000, d: "Res, pollo, cerdo y chorizo" },
+                { n: "Churrasco (350g)", p: 40000 },
+                { n: "Punta de Anca Res", p: 40000 },
+                { n: "T-Bone / Tomahawk", p: 68000, d: "Corte especial 620gr" }
             ]},
-            { cat: "Bebidas", items: [
-                [span_22](start_span){ n: "Limonada Natural", p: 9000, d: "[span_22](end_span)" },
-                [span_23](start_span){ n: "Jugos Naturales", p: 9000, d: "[span_23](end_span)" },
-                [span_24](start_span){ n: "Gaseosa 350ml", p: 4000, d: "[span_24](end_span)" }
+            { c: "Mariscos y Pescados", i: [
+                { n: "Cazuela de Mariscos", p: 49000 },
+                { n: "Salmón a la plancha", p: 48000 },
+                { n: "Langostinos al ajillo", p: 61000 },
+                { n: "Salmón Marinera", p: 65000 }
+            ]},
+            { c: "Express y Ejecutivos", i: [
+                { n: "Ejecutivo del día", p: 23000, d: "Sopa + Bandeja completa" },
+                { n: "Sancocho (Domingos)", p: 23000 },
+                { n: "Hamburguesa Estancia", p: 20000 },
+                { n: "Salchipapa", p: 18000 }
             ]}
         ];
 
         let cart = {};
 
-        function renderMenu() {
-            const container = document.getElementById('menu-container');
-            container.innerHTML = menuData.map(section => `
-                <div class="menu-section">
-                    <div class="category-header">
-                        <h3 class="text-xs font-black text-estancia tracking-[0.3em] uppercase px-2">${section.cat}</h3>
-                    </div>
+        function render() {
+            const list = document.getElementById('menu-list');
+            list.innerHTML = data.map(cat => `
+                <div>
+                    <div class="category-sticky"><h3 class="font-black text-estancia uppercase text-sm tracking-widest px-2">${cat.c}</h3></div>
                     <div class="mt-4 space-y-3">
-                        ${section.items.map(item => {
-                            const cleanId = item.n.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
+                        ${cat.i.map(item => {
+                            const id = item.n.replace(/\s+/g, '');
                             return `
-                            <div class="item-card bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center card-menu border border-gray-100">
+                            <div class="item-card bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 border-amber-900">
                                 <div class="flex-1 pr-2">
                                     <h4 class="font-bold text-gray-800 text-sm">${item.n}</h4>
-                                    ${item.d ? `<p class="text-[10px] text-gray-400 mt-1 italic">${item.d}</p>` : ''}
+                                    <p class="text-xs text-gray-400 mt-1 italic">${item.d || ''}</p>
                                     <p class="text-sm font-black text-amber-700 mt-1">$${item.p.toLocaleString()}</p>
                                 </div>
-                                <div class="flex items-center gap-3 bg-gray-50 p-1.5 rounded-xl">
-                                    <button onclick="updateQty('${item.n}', ${item.p}, -1, '${cleanId}')" class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center font-bold text-gray-500">-</button>
-                                    <span id="qty-${cleanId}" class="font-bold text-estancia w-5 text-center">0</span>
-                                    <button onclick="updateQty('${item.n}', ${item.p}, 1, '${cleanId}')" class="w-8 h-8 rounded-lg bg-estancia text-white shadow-sm flex items-center justify-center font-bold">+</button>
+                                <div class="flex items-center gap-3 bg-gray-100 p-1.5 rounded-xl">
+                                    <button onclick="changeQty('${item.n}', ${item.p}, -1, '${id}')" class="w-8 h-8 rounded-lg bg-white flex items-center justify-center font-bold text-gray-400 shadow-sm">-</button>
+                                    <span id="q-${id}" class="font-bold text-estancia w-5 text-center">0</span>
+                                    <button onclick="changeQty('${item.n}', ${item.p}, 1, '${id}')" class="w-8 h-8 rounded-lg bg-estancia text-white flex items-center justify-center font-bold shadow-sm">+</button>
                                 </div>
                             </div>`;
                         }).join('')}
@@ -122,58 +129,55 @@
             `).join('');
         }
 
-        function updateQty(name, price, change, id) {
-            if (!cart[name]) cart[name] = { qty: 0, price: price };
-            cart[name].qty += change;
-            if (cart[name].qty < 0) cart[name].qty = 0;
-            document.getElementById(`qty-${id}`).innerText = cart[name].qty;
-            calculateTotal();
+        function changeQty(name, price, delta, id) {
+            if (!cart[name]) cart[name] = { q: 0, p: price };
+            cart[name].q += delta;
+            if (cart[name].q < 0) cart[name].q = 0;
+            document.getElementById('q-' + id).innerText = cart[name].q;
+            updateTotal();
         }
 
-        function calculateTotal() {
-            let total = 0;
-            for (let i in cart) { total += cart[i].qty * cart[i].price; }
-            document.getElementById('total-price').innerText = `$${total.toLocaleString()}`;
+        function updateTotal() {
+            let t = 0;
+            for (let k in cart) t += cart[k].q * cart[k].p;
+            document.getElementById('total-val').innerText = '$' + t.toLocaleString();
         }
 
-        function filterMenu() {
-            let q = document.getElementById('search').value.toLowerCase();
-            let cards = document.getElementsByClassName('item-card');
+        function filterItems() {
+            const q = document.getElementById('search').value.toLowerCase();
+            const cards = document.getElementsByClassName('item-card');
             for (let c of cards) {
-                let name = c.querySelector('h4').innerText.toLowerCase();
+                const name = c.querySelector('h4').innerText.toLowerCase();
                 c.style.display = name.includes(q) ? "flex" : "none";
             }
         }
 
-        function sendWhatsApp() {
+        function enviarPedido() {
             const n = document.getElementById('nombre').value;
             const c = document.getElementById('celular').value;
             const d = document.getElementById('direccion').value;
-            const o = document.getElementById('obs_generales').value;
-            
-            if (!n || !c || !d) { alert("Completa nombre, celular y dirección"); return; }
+            if (!n || !c || !d) return alert("Por favor llena Nombre, Celular y Dirección");
 
-            let msg = `*LA ESTANCIA - NUEVO PEDIDO*%0A`;
-            msg += `*Cliente:* ${n}%0A*Celular:* ${c}%0A*Dirección:* ${d}%0A%0A`;
-            
+            let m = `*PEDIDO LA ESTANCIA*%0A*Cliente:* ${n}%0A*Celular:* ${c}%0A*Dir:* ${d}%0A%0A`;
+            let items = false;
             let total = 0;
-            let hasItems = false;
+
             for (let k in cart) {
-                if (cart[k].qty > 0) {
-                    msg += `• ${cart[k].qty}x ${k} ($${(cart[k].qty * cart[k].price).toLocaleString()})%0A`;
-                    total += cart[k].qty * cart[k].price;
-                    hasItems = true;
+                if (cart[k].q > 0) {
+                    m += `• ${cart[k].q}x ${k} ($${(cart[k].q * cart[k].p).toLocaleString()})%0A`;
+                    total += cart[k].q * cart[k].p;
+                    items = true;
                 }
             }
 
-            if (!hasItems) { alert("Agrega algo al pedido"); return; }
-            if (o) msg += `%0A*Obs:* ${o}%0A`;
-            msg += `%0A*TOTAL: $${total.toLocaleString()}*`;
-
-            window.open(`https://wa.me/573205775709?text=${msg}`, '_blank');
+            if (!items) return alert("Selecciona al menos un plato");
+            const obs = document.getElementById('obs').value;
+            if (obs) m += `%0A*Obs:* ${obs}`;
+            m += `%0A%0A*TOTAL: $${total.toLocaleString()}*`;
+            window.open(`https://wa.me/573205775709?text=${m}`, '_blank');
         }
 
-        window.onload = renderMenu;
+        window.onload = render;
     </script>
 </body>
 </html>
