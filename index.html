@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Estancia - Menú Completo 2026</title>
+    <title>La Estancia - App Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -13,20 +13,24 @@
         .text-estancia { color: var(--primary); }
         .category-sticky { position: sticky; top: 0; z-index: 30; background: #f3f4f6; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
         .card-menu { border-left: 5px solid var(--primary); }
+        /* Ajuste para que el logo se vea bien */
+        .header-logo { width: 100%; max-height: 180px; object-fit: cover; }
     </style>
 </head>
 <body class="pb-48">
 
-    <div class="bg-estancia text-white p-6 text-center shadow-lg">
-        <h1 class="text-3xl font-bold uppercase italic">LA ESTANCIA</h1>
-        <p class="text-[10px] tracking-[0.2em] opacity-90 mt-1">ASADOS & MARISCOS</p>
-        <p class="text-[11px] mt-2 opacity-80">
-            <i class="fas fa-map-marker-alt"></i> Calle 22 Diagonal a la Catedral - Caucasia
-        </p>
+    <div class="bg-estancia text-white shadow-lg overflow-hidden">
+        <img src="la-estancia.PNG" alt="La Estancia Logo" class="header-logo">
+        <div class="p-4 text-center">
+            <p class="text-[10px] tracking-[0.2em] opacity-90 uppercase">Asados & Mariscos</p>
+            <p class="text-[11px] mt-1 opacity-80">
+                <i class="fas fa-map-marker-alt"></i> Calle 22 Diagonal a la Catedral - Caucasia
+            </p>
+        </div>
     </div>
 
     <div class="p-4 max-w-md mx-auto">
-        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6">
+        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6 border border-gray-100">
             <h2 class="font-bold text-estancia mb-4 flex items-center gap-2 text-xs uppercase">
                 <i class="fas fa-motorcycle"></i> Datos del Domicilio
             </h2>
@@ -50,7 +54,7 @@
     <div class="fixed bottom-0 w-full bg-white border-t p-5 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-50">
         <div class="max-w-md mx-auto">
             <div class="flex justify-between items-center mb-4 px-2">
-                <span class="text-gray-500 font-medium">Total:</span>
+                <span class="text-gray-500 font-medium text-sm">Total a pagar:</span>
                 <span id="total-val" class="text-3xl font-black text-estancia">$0</span>
             </div>
             <button onclick="enviarPedido()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold flex justify-center items-center gap-3 shadow-lg active:scale-95 transition-all">
@@ -72,21 +76,21 @@
                 { n: "César con camarones", p: 27000 },
                 { n: "Mediterránea", p: 33000 }
             ]},
-            { c: "Pollo (Especialidades)", i: [
+            { c: "Pollo", i: [
                 { n: "Rollo de pollo", p: 35000, d: "Relleno de jamón, tocinetas y queso holandés" },
                 { n: "Pechuga en salsa tropical", p: 35000 },
                 { n: "Pechuga en tocineta", p: 35000 },
                 { n: "Pechuga en champiñones", p: 35000 },
                 { n: "Pechuga stroganoff", p: 37000 }
             ]},
-            { c: "Cerdo (Especialidades)", i: [
+            { c: "Cerdo", i: [
                 { n: "Cerdo a la naranja", p: 35000 },
                 { n: "Cerdo en tocineta", p: 35000 },
                 { n: "Cerdo en champiñones", p: 35000 },
                 { n: "Cerdo en salsa tropical", p: 35000 },
                 { n: "Cerdo stroganoff", p: 37000 }
             ]},
-            { c: "Res (Especialidades)", i: [
+            { c: "Res", i: [
                 { n: "Estofado de lomo", p: 36000 },
                 { n: "Steak pimienta", p: 38000 },
                 { n: "Solomito en tocineta", p: 40000 },
@@ -95,17 +99,16 @@
                 { n: "Filet Mignon", p: 40000 }
             ]},
             { c: "Pastas", i: [
-                { n: "Amatriciana", p: 18000 }, { n: "Vegetariana", p: 18000 },
-                { n: "Al filetto", p: 20000 }, { n: "Alfredo", p: 22000 },
-                { n: "Cuatro quesos", p: 22000 }, { n: "Carbonara", p: 25000 },
-                { n: "Jeremías", p: 28000 }, { n: "Pasta con camarones", p: 34000 },
+                { n: "Pasta Amatriciana", p: 18000 }, { n: "Pasta Vegetariana", p: 18000 },
+                { n: "Pasta Al filetto", p: 20000 }, { n: "Pasta Alfredo", p: 22000 },
+                { n: "Pasta Cuatro quesos", p: 22000 }, { n: "Pasta Carbonara", p: 25000 },
+                { n: "Pasta Jeremías", p: 28000 }, { n: "Pasta con camarones", p: 34000 },
                 { n: "Pasta Marinera", p: 38000 }
             ]},
             { c: "Asados al Grill", i: [
                 { n: "Chuleta de cerdo 400gr", p: 30000 }, { n: "Cañón al grill 340gr", p: 32000 },
                 { n: "Pechuga al grill 320gr", p: 32000 }, { n: "Chicharrón al grill 420gr", p: 34000 },
-                { n: "Pechuga gratinada 320gr", p: 36000 }, { n: "Costillas BBQ 500gr", p: 38000 },
-                { n: "Mix parrillero 480gr", p: 38000 }, { n: "Punta de anca cerdo 400gr", p: 37000 },
+                { n: "Costillas BBQ 500gr", p: 38000 }, { n: "Mix parrillero 480gr", p: 38000 },
                 { n: "Baby beef 350gr", p: 40000 }, { n: "Punta de anca 400gr", p: 40000 },
                 { n: "Churrasco 350gr", p: 40000 }, { n: "T-bone 620gr", p: 68000 },
                 { n: "Tomahawk 620gr", p: 68000 }
@@ -113,29 +116,23 @@
             { c: "Mariscos", i: [
                 { n: "Cóctel de camarón", p: 37000 }, { n: "Camarones al ajillo", p: 46000 },
                 { n: "Parrilla mar y tierra", p: 48000 }, { n: "Cazuela de mariscos", p: 49000 },
-                { n: "Cazuela de camarones", p: 49000 }, { n: "Cazuela mariscos gratinado", p: 53000 },
-                { n: "Cazuela camarones gratinado", p: 53000 }, { n: "Langostinos al ajillo", p: 61000 },
+                { n: "Cazuela mixta gratinada", p: 53000 }, { n: "Langostinos al ajillo", p: 61000 },
                 { n: "Langostinos apanados", p: 63000 }
             ]},
             { c: "Pescados (Salmón)", i: [
                 { n: "Salmón a la plancha", p: 48000 }, { n: "Salmón menier", p: 50000 },
                 { n: "Salmón gratinado", p: 53000 }, { n: "Salmón al ajillo", p: 54000 },
-                { n: "Salmón cuatro quesos", p: 54000 }, { n: "Salmón con camarones", p: 59000 },
                 { n: "Salmón marinera", p: 65000 }
             ]},
-            { c: "Estancia Express", i: [
-                { n: "Salchipapa", p: 18000 }, { n: "Pechuga mini", p: 19000 },
-                { n: "Hamburguesa", p: 20000 }, { n: "Chuzo de pollo", p: 22000 },
-                { n: "Alitas BBQ o Picantes", p: 24000 }
-            ]},
-            { c: "Ejecutivos", i: [
-                { n: "Ejecutivo del día", p: 23000, d: "Res, Pollo, Cerdo, Chuleta o Chicharrón" },
-                { n: "Sancocho (Domingos)", p: 23000 }
+            { c: "Express y Ejecutivos", i: [
+                { n: "Salchipapa", p: 18000 }, { n: "Hamburguesa", p: 20000 },
+                { n: "Chuzo de pollo", p: 22000 }, { n: "Alitas BBQ/Picantes", p: 24000 },
+                { n: "Ejecutivo del día", p: 23000 }, { n: "Sancocho (Domingos)", p: 23000 }
             ]},
             { c: "Bebidas", i: [
                 { n: "Limonada Natural", p: 9000 }, { n: "Limonada Coco/Cereza", p: 10000 },
                 { n: "Jugos Naturales", p: 9000 }, { n: "Gaseosa 350ml", p: 4000 },
-                { n: "Hatsu", p: 8000 }, { n: "Electrolit", p: 10000 }
+                { n: "Soda Saborizada", p: 8000 }, { n: "Agua 600ml", p: 3000 }
             ]}
         ];
 
@@ -153,7 +150,7 @@
                             <div class="item-card bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center card-menu border border-gray-100">
                                 <div class="flex-1 pr-2">
                                     <h4 class="font-bold text-gray-800 text-sm">${item.n}</h4>
-                                    <p class="text-[10px] text-gray-400 mt-1">${item.d || ''}</p>
+                                    <p class="text-[10px] text-gray-400 mt-1 italic">${item.d || ''}</p>
                                     <p class="text-sm font-black text-amber-700 mt-1">$${item.p.toLocaleString()}</p>
                                 </div>
                                 <div class="flex items-center gap-3 bg-gray-50 p-1.5 rounded-xl">
@@ -195,9 +192,9 @@
             const n = document.getElementById('nombre').value;
             const c = document.getElementById('celular').value;
             const d = document.getElementById('direccion').value;
-            if (!n || !c || !d) return alert("Completa tus datos de entrega");
+            if (!n || !c || !d) return alert("Por favor completa tus datos de entrega.");
 
-            let msg = `*PEDIDO LA ESTANCIA*%0A*Cliente:* ${n}%0A*Celular:* ${c}%0A*Dir:* ${d}%0A%0A`;
+            let msg = `*LA ESTANCIA - NUEVO PEDIDO*%0A*Cliente:* ${n}%0A*Celular:* ${c}%0A*Dir:* ${d}%0A%0A`;
             let items = false;
             let total = 0;
 
@@ -209,9 +206,9 @@
                 }
             }
 
-            if (!items) return alert("Selecciona al menos un producto");
+            if (!items) return alert("Agregue al menos un plato a su pedido.");
             const obs = document.getElementById('obs').value;
-            if (obs) msg += `%0A*Obs:* ${obs}`;
+            if (obs) msg += `%0A*Observaciones:* ${obs}`;
             msg += `%0A%0A*TOTAL: $${total.toLocaleString()}*`;
             window.open(`https://wa.me/573205775709?text=${msg}`, '_blank');
         }
